@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.gameContainer {
+    background-color: #ffffff;
+    padding: 2rem;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.gameContainer h1 {
+    color: #ff6f61;
+    margin-bottom: 1rem;
+}
+
+.instructions {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.inputGroup input {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.inputGroup input:focus {
+    border-color: #ff6f61;
+}
+
+button {
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#guessBtn {
+    background-color: #fa5b4c;
+    color: #fff;
+    margin-top: 0.5rem;
+}
+
+#guessBtn:hover {
+    background-color: #e85a50;
+}
+
+.restartBtn {
+    margin-top: 1rem;
+    background-color: #4caf50;
+    color: white;
+}
+
+.restartBtn:hover {
+    background-color: #43a047;
+}
+
+.message {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
