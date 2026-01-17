@@ -43,6 +43,10 @@ body {
     line-height: 1.6;
 }
 
+.attempt {
+    color: #fd0202;
+}
+
 .inputGroup {
     display: flex;
     flex-direction: column;

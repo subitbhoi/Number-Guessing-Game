@@ -4,7 +4,9 @@ const message = document.querySelector(".message");
 const restartBtn = document.getElementById("restartBtn");
 
 let secretNumber = Math.floor(Math.random() * 10) + 1;
-let attemptsLeft = 5;
+let attemptsLeft = 3;
+
+let attempt = document.querySelector(".attempt");
 
 guessBtn.addEventListener("click", function () {
     const userGuess = Number(guessInput.value);
@@ -21,6 +23,7 @@ guessBtn.addEventListener("click", function () {
     }
 
     attemptsLeft--;
+    attempt.textContent = attemptsLeft;
 
     if (userGuess > secretNumber) {
         message.textContent = "👆 Too High! Guess again";
@@ -36,8 +39,9 @@ guessBtn.addEventListener("click", function () {
 
 restartBtn.addEventListener("click", function () {
     secretNumber = Math.floor(Math.random() * 10) + 1;
-    attemptsLeft = 5;
+    attemptsLeft = 3;
 
+    attempt.textContent = attemptsLeft;
     message.textContent = "Guess a number between 1 & 10";
     guessInput.value = "";
     guessBtn.disabled = false;
