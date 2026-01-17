@@ -10,12 +10,12 @@ guessBtn.addEventListener("click", function () {
     const userGuess = Number(guessInput.value);
 
     if (!userGuess || userGuess < 1 || userGuess > 10) {
-        message.textContent = "❌ Please enter a number between 1 & 10.";
+        message.textContent = "❌ Please enter a number between 1 & 10";
         return;
     }
 
     if (userGuess === secretNumber) {
-        message.textContent = "🎉 Correct! You guessed the number.";
+        message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
         return;
     }
@@ -23,13 +23,13 @@ guessBtn.addEventListener("click", function () {
     attemptsLeft--;
 
     if (userGuess > secretNumber) {
-        message.textContent = "👆 Too High! Guess again.";
+        message.textContent = "👆 Too High! Guess again";
     } else {
-        message.textContent = "👇 Too Low! Guess again.";
+        message.textContent = "👇 Too Low! Guess again";
     }
 
     if (attemptsLeft === 0) {
-        message.textContent = `🚫 Game Over! The number was ${secretNumber}.`;
+        message.textContent = `🚫 Game Over! The number was ${secretNumber}`;
         guessBtn.disabled = true;
     }
 });

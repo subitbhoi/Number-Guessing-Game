@@ -36,6 +36,13 @@ body {
     line-height: 1.6;
 }
 
+.attempts {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
 .inputGroup {
     display: flex;
     flex-direction: column;
@@ -86,5 +93,6 @@ button {
 .message {
     margin-top: 1rem;
     margin-bottom: 1rem;
+    min-height: 1.5rem;
     font-weight: bold;
 }
