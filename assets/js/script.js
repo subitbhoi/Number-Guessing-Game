@@ -20,6 +20,12 @@ guessBtn.addEventListener("click", function () {
     if (userGuess === secretNumber) {
         message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
+
+        gameContainer.classList.add("success");
+
+        setTimeout(function () {
+            gameContainer.classList.remove("success");
+        }, 500);
         return;
     }
 
