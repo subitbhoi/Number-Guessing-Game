@@ -20,6 +20,7 @@ guessBtn.addEventListener("click", function () {
     if (userGuess === secretNumber) {
         message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
+        guessInput.disabled = true;
 
         gameContainer.classList.add("success");
 
@@ -48,6 +49,7 @@ guessBtn.addEventListener("click", function () {
     if (attemptsLeft === 0) {
         message.textContent = `🚫 Game Over! The number was ${secretNumber}`;
         guessBtn.disabled = true;
+        guessInput.disabled = true;
     }
 });
 
@@ -59,6 +61,8 @@ restartBtn.addEventListener("click", function () {
     message.textContent = "Guess a number between 1 & 10";
     guessInput.value = "";
     guessBtn.disabled = false;
+    guessInput.disabled = false;
+    guessInput.focus();
 });
 
 guessInput.addEventListener("keydown", function (event) {
