@@ -1,3 +1,4 @@
+const gameContainer = document.querySelector(".gameContainer");
 const guessInput = document.getElementById("guessInput");
 const guessBtn = document.getElementById("guessBtn");
 const message = document.querySelector(".message");
@@ -30,6 +31,13 @@ guessBtn.addEventListener("click", function () {
     } else {
         message.textContent = "👇 Too Low! Guess again";
     }
+
+    gameContainer.classList.add("shake");
+
+    setTimeout(function () {
+        gameContainer.classList.remove("shake");
+    }, 400);
+
 
     if (attemptsLeft === 0) {
         message.textContent = `🚫 Game Over! The number was ${secretNumber}`;
