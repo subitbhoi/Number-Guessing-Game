@@ -46,3 +46,15 @@ restartBtn.addEventListener("click", function () {
     guessInput.value = "";
     guessBtn.disabled = false;
 });
+
+guessInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        guessBtn.click();
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        restartBtn.click();
+    }
+});
