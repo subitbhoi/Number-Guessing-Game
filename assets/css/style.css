@@ -29,6 +29,24 @@ body {
     margin-bottom: 1rem;
 }
 
+.level {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.level select {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.level select:focus {
+    border-color: #ff6f61;
+}
+
 .instructions {
     font-size: 0.95rem;
     color: #555;

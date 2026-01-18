@@ -12,16 +12,30 @@
     <main>
         <div class="gameContainer">
             <h1>Number Guessing Game</h1>
+            <div class="level">
+                <select name="Difficulty Level" id="difficultyLevel">
+                    <option value="SelectDifficultyLevel" selected hidden>Difficulty Level</option>
+                    <option value="easy">Easy (1 - 10)</option>
+                    <option value="medium">Medium (1 - 50)</option>
+                    <option value="hard">Hard (1 - 100)</option>
+                </select>
+                <select name="Attempts" id="attemptLevel">
+                    <option value="SelectAttemptsLevel" selected hidden>Attempts</option>
+                    <option value="easy">Easy (5)</option>
+                    <option value="medium">Medium (3)</option>
+                    <option value="hard">Hard (1)</option>
+                </select>
+            </div>
             <p class="instructions">
-                Guess the secret number between <strong>1</strong> & <strong>10</strong>.
+                Guess the secret number.
             </p>
-            <p class="attempts">You have <strong class="attempt">3</strong> attempts left.</p>
+            <p class="attempts">Attempts left:</p>
             <div class="inputGroup">
                 <label for="guessInput">Enter your guess:</label>
-                <input type="number" id="guessInput" min="1" max="10" placeholder="1 - 10" />
+                <input type="number" id="guessInput" min="1" max="10" placeholder="Enter your guess" />
                 <button id="guessBtn">Guess The Number</button>
             </div>
-            <p class="message">Guess a number between 1 & 10</p>
+            <p class="message"></p>
             <button id="restartBtn">Restart Game</button>
         </div>
     </main>
