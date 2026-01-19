@@ -175,4 +175,6 @@ window.addEventListener("load", function () {
     if (bestScore > 0) {
         animateScore(bestScoreE1, 0, Number(bestScore));
     }
+    difficultyLevel.selectedIndex = 0;
+    attemptLevel.selectedIndex = 0;
 });
