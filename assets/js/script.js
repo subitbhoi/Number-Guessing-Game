@@ -83,11 +83,11 @@ guessBtn.addEventListener("click", function () {
 
         const totalScore = difficultyScore + attemptScore;
 
-        currentScoreE1.textContent = totalScore;
+        animateScore(currentScoreE1, 0, totalScore);
 
         bestScore = Number(bestScore) + Number(totalScore);
         localStorage.setItem("bestScore", bestScore);
-        bestScoreE1.textContent = bestScore;
+        animateScore(bestScoreE1, bestScore - totalScore, bestScore);
 
         message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
@@ -135,6 +135,21 @@ function resetGame() {
     guessInput.disabled = false;
     guessBtn.disabled = false;
     guessInput.focus();
+}
+
+function animateScore(element, start, end, duration = 600) {
+    let current = start;
+    const increment = end > start ? 1 : -1;
+    const stepTime = Math.abs(Math.floor(duration / (end - start)));
+
+    const timer = setInterval(function () {
+        current += increment;
+        element.textContent = current;
+
+        if (current === end) {
+            clearInterval(timer);
+        }
+    }, stepTime);
 }
 
 restartBtn.addEventListener("click", function () {

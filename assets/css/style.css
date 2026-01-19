@@ -30,11 +30,19 @@ body {
 }
 
 .score-board {
+    font-family: 'Orbitron', sans-serif;
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
     margin-bottom: 1rem;
     color: #444;
+}
+
+#currentScore,
+#bestScore {
+    font-size: 1.2rem;
+    color: #ff6f61;
+    letter-spacing: 1px;
 }
 
 .level {
