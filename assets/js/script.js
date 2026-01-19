@@ -34,6 +34,9 @@ const attemptPoints = {
 
 let bestScore = localStorage.getItem("bestScore") || 0;
 bestScoreE1.textContent = bestScore;
+let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
+currentScoreE1.textContent = currentScore;
+message.textContent = `Best Score: ${bestScore}`;
 let currentMax = "";
 let currentAttempts = "";
 let secretNumber = Math.floor(Math.random() * currentMax) + 1;
@@ -74,6 +77,12 @@ guessBtn.addEventListener("click", function () {
 
     if (!userGuess || userGuess < 1 || userGuess > currentMax) {
         message.textContent = `❌ Please enter a number between 1 & ${currentMax}`;
+
+        guessInput.classList.add("shake");
+
+        setTimeout(function () {
+            guessInput.classList.remove("shake");
+        }, 400);
         return;
     }
 
@@ -82,8 +91,11 @@ guessBtn.addEventListener("click", function () {
         const attemptScore = attemptPoints[attemptLevel.value];
 
         const totalScore = difficultyScore + attemptScore;
+        currentScore = Number(currentScore) + Number(totalScore);
+        sessionStorage.setItem("currentScore", currentScore);
 
-        animateScore(currentScoreE1, 0, totalScore);
+
+        animateScore(currentScoreE1, 0, currentScore);
 
         bestScore = Number(bestScore) + Number(totalScore);
         localStorage.setItem("bestScore", bestScore);
@@ -126,12 +138,13 @@ guessBtn.addEventListener("click", function () {
 
 function resetGame() {
     selectedAttempt = attemptLevel.value;
-    attemptSettings = attemptLevelSettings[selectedAttempt];
+    const attemptSettings = attemptLevelSettings[selectedAttempt];
     currentAttempts = attemptSettings.attempts;
     attempts.textContent = `Attempt left: ${currentAttempts}`;
     secretNumber = Math.floor(Math.random() * currentMax) + 1;
+    message.textContent = `Score: ${currentScore} & Best Score: ${bestScore}`;
+    currentScoreE1.textContent = currentScore;
     guessInput.value = "";
-    currentScoreE1.textContent = 0;
     guessInput.disabled = false;
     guessBtn.disabled = false;
     guessInput.focus();
@@ -156,7 +169,10 @@ restartBtn.addEventListener("click", function () {
     resetGame();
     if (bestScore > 0) {
         animateScore(bestScoreE1, 0, Number(bestScore));
-    }
+    };
+    if (currentScore > 0) {
+        animateScore(currentScoreE1, 0, Number(currentScore));
+    };
 });
 
 guessInput.addEventListener("keydown", function (event) {
@@ -177,4 +193,7 @@ window.addEventListener("load", function () {
     }
     difficultyLevel.selectedIndex = 0;
     attemptLevel.selectedIndex = 0;
+    currentScore = 0;
+    sessionStorage.setItem("currentScore", currentScore);
+    currentScoreE1.textContent = currentScore;
 });
