@@ -137,7 +137,7 @@ function resetGame() {
     guessInput.focus();
 }
 
-function animateScore(element, start, end, duration = 600) {
+function animateScore(element, start, end, duration = 1000) {
     let current = start;
     const increment = end > start ? 1 : -1;
     const stepTime = Math.abs(Math.floor(duration / (end - start)));
@@ -154,6 +154,7 @@ function animateScore(element, start, end, duration = 600) {
 
 restartBtn.addEventListener("click", function () {
     resetGame();
+    animateScore(bestScoreE1, 0, Number(bestScore));
 });
 
 guessInput.addEventListener("keydown", function (event) {
@@ -166,4 +167,8 @@ document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
         resetGame();
     }
+});
+
+window.addEventListener("load", function () {
+    animateScore(bestScoreE1, 0, Number(bestScore));
 });
