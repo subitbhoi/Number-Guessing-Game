@@ -154,7 +154,9 @@ function animateScore(element, start, end, duration = 1000) {
 
 restartBtn.addEventListener("click", function () {
     resetGame();
-    animateScore(bestScoreE1, 0, Number(bestScore));
+    if (bestScore > 0) {
+        animateScore(bestScoreE1, 0, Number(bestScore));
+    }
 });
 
 guessInput.addEventListener("keydown", function (event) {
@@ -170,5 +172,7 @@ document.addEventListener("keydown", function (event) {
 });
 
 window.addEventListener("load", function () {
-    animateScore(bestScoreE1, 0, Number(bestScore));
+    if (bestScore > 0) {
+        animateScore(bestScoreE1, 0, Number(bestScore));
+    }
 });
