@@ -7,6 +7,8 @@ const difficultyLevel = document.getElementById("difficultyLevel");
 const attemptLevel = document.getElementById("attemptLevel");
 const instructions = document.querySelector(".instructions");
 const attempts = document.querySelector(".attempts");
+const currentScoreE1 = document.getElementById("currentScore");
+const bestScoreE1 = document.getElementById("bestScore");
 const difficultyLevelSettings = {
     easy: { max: 10 },
     medium: { max: 50 },
@@ -18,6 +20,20 @@ const attemptLevelSettings = {
     hard: { attempts: 1 }
 }
 
+const difficultyPoints = {
+    easy: 1,
+    medium: 2,
+    hard: 3
+}
+
+const attemptPoints = {
+    easy: 1,
+    medium: 2,
+    hard: 3
+}
+
+let bestScore = localStorage.getItem("bestScore") || 0;
+bestScoreE1.textContent = bestScore;
 let currentMax = "";
 let currentAttempts = "";
 let secretNumber = Math.floor(Math.random() * currentMax) + 1;
@@ -62,6 +78,17 @@ guessBtn.addEventListener("click", function () {
     }
 
     if (userGuess === secretNumber) {
+        const difficultyScore = difficultyPoints[difficultyLevel.value];
+        const attemptScore = attemptPoints[attemptLevel.value];
+
+        const totalScore = difficultyScore + attemptScore;
+
+        currentScoreE1.textContent = totalScore;
+
+        bestScore = Number(bestScore) + Number(totalScore);
+        localStorage.setItem("bestScore", bestScore);
+        bestScoreE1.textContent = bestScore;
+
         message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
         guessInput.disabled = true;
@@ -104,6 +131,7 @@ function resetGame() {
     attempts.textContent = `Attempt left: ${currentAttempts}`;
     secretNumber = Math.floor(Math.random() * currentMax) + 1;
     guessInput.value = "";
+    currentScoreE1.textContent = 0;
     guessInput.disabled = false;
     guessBtn.disabled = false;
     guessInput.focus();
