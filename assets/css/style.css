@@ -164,24 +164,43 @@ button {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    display: none;
+
+    display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
     z-index: 1000;
 }
 
 .modal-overlay.active {
-    display: flex;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .modal {
+    font-family: 'Poppins', sans-serif;
     background: white;
     padding: 1.5rem;
     border-radius: 12px;
     width: 90%;
     max-width: 320px;
     text-align: center;
-    animation: popIn 0.3s ease;
+
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    /* animation: popIn 0.3s ease; */
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal-summary span {
+    font-weight: 600;
+    color: #ff6f61;
+    letter-spacing: 0, 5px;
 }
 
 @keyframes popIn {

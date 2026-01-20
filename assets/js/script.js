@@ -186,6 +186,10 @@ function resetGame() {
 }
 
 function animateScore(element, start, end, duration = 1000) {
+    if (start === end) {
+        element.textContent = end;
+        return;
+    }
     let current = start;
     const increment = end > start ? 1 : -1;
     const stepTime = Math.abs(Math.floor(duration / (end - start)));
@@ -213,24 +217,32 @@ function openSessionModal() {
     modalWins.textContent = wins;
     modalLosses.textContent = losses;
 
+    animateScore(modalScore, 0, sessionScore, 600);
+    animateScore(modalRounds, 0, roundsPlayed, 600);
+    animateScore(modalWins, 0, wins, 600);
+    animateScore(modalLosses, 0, losses, 600);
+
     sessionModal.classList.add("active");
+    document.body.classList.add("modal-open");
 }
 
 function closeSessionModal() {
     sessionModal.classList.remove("active");
+    document.body.classList.remove("modal-open");
 }
 
 function endSession() {
-    sessionStorage.clear();
-
     sessionScore = 0;
     roundsPlayed = 0;
     wins = 0;
     losses = 0;
     updateSessionSummaryUI();
     closeSessionModal();
-
     resetGame();
+    sessionStorage.clear();
+    currentScore = 0;
+    sessionStorage.setItem("currentScore", currentScore);
+    location.reload();
 }
 
 
@@ -257,6 +269,18 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && sessionModal.classList.contains("active")) {
+        closeSessionModal();
+    }
+});
+
+sessionModal.addEventListener("click", function (event) {
+    if (event.target === sessionModal) {
+        closeSessionModal();
+    }
+});
+
 window.addEventListener("load", function () {
     if (bestScore > 0) {
         animateScore(bestScoreE1, 0, Number(bestScore));
@@ -266,6 +290,8 @@ window.addEventListener("load", function () {
     currentScore = 0;
     sessionStorage.setItem("currentScore", currentScore);
     currentScoreE1.textContent = currentScore;
+    endSession();
+    resetGame();
 });
 
 endSessionBtn.addEventListener("click", openSessionModal);
