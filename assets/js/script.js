@@ -9,6 +9,18 @@ const instructions = document.querySelector(".instructions");
 const attempts = document.querySelector(".attempts");
 const currentScoreE1 = document.getElementById("currentScore");
 const bestScoreE1 = document.getElementById("bestScore");
+const sessionScoreE1 = document.getElementById("sessionScore");
+const roundsPlayedE1 = document.getElementById("roundsPlayed");
+const winsE1 = document.getElementById("wins");
+const lossesE1 = document.getElementById("losses");
+const endSessionBtn = document.getElementById("endSessionBtn");
+const sessionModal = document.getElementById("sessionModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const confirmEndSessionBtn = document.getElementById("confirmEndSessionBtn");
+const modalScore = document.getElementById("modalScore");
+const modalRounds = document.getElementById("modalRounds");
+const modalWins = document.getElementById("modalWins");
+const modalLosses = document.getElementById("modalLosses");
 const difficultyLevelSettings = {
     easy: { max: 10 },
     medium: { max: 50 },
@@ -32,6 +44,10 @@ const attemptPoints = {
     hard: 3
 }
 
+let sessionScore = Number(sessionStorage.getItem("sessionScore")) || 0;
+let roundsPlayed = Number(sessionStorage.getItem("roundsPlayed")) || 0;
+let wins = Number(sessionStorage.getItem("wins")) || 0;
+let losses = Number(sessionStorage.getItem("losses")) || 0;
 let bestScore = localStorage.getItem("bestScore") || 0;
 bestScoreE1.textContent = bestScore;
 let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
@@ -101,6 +117,16 @@ guessBtn.addEventListener("click", function () {
         localStorage.setItem("bestScore", bestScore);
         animateScore(bestScoreE1, bestScore - totalScore, bestScore);
 
+        roundsPlayed++;
+        wins++
+        sessionScore = currentScore;
+
+        sessionStorage.setItem("roundsPlayed", roundsPlayed);
+        sessionStorage.setItem("wins", wins);
+        sessionStorage.setItem("sessionScore", sessionScore);
+
+        updateSessionSummaryUI();
+
         message.textContent = "🎉 Correct! You guessed the number";
         guessBtn.disabled = true;
         guessInput.disabled = true;
@@ -131,6 +157,15 @@ guessBtn.addEventListener("click", function () {
 
     if (currentAttempts === 0) {
         message.textContent = `🚫 Game Over! The number was ${secretNumber}`;
+
+        roundsPlayed++;
+        losses++;
+
+        sessionStorage.setItem("roundsPlayed", roundsPlayed);
+        sessionStorage.setItem("losses", losses);
+
+        updateSessionSummaryUI();
+
         guessBtn.disabled = true;
         guessInput.disabled = true;
     }
@@ -165,6 +200,41 @@ function animateScore(element, start, end, duration = 1000) {
     }, stepTime);
 }
 
+function updateSessionSummaryUI() {
+    sessionScoreE1.textContent = sessionScore;
+    roundsPlayedE1.textContent = roundsPlayed;
+    winsE1.textContent = wins;
+    lossesE1.textContent = losses;
+}
+
+function openSessionModal() {
+    modalScore.textContent = sessionScore;
+    modalRounds.textContent = roundsPlayed;
+    modalWins.textContent = wins;
+    modalLosses.textContent = losses;
+
+    sessionModal.classList.add("active");
+}
+
+function closeSessionModal() {
+    sessionModal.classList.remove("active");
+}
+
+function endSession() {
+    sessionStorage.clear();
+
+    sessionScore = 0;
+    roundsPlayed = 0;
+    wins = 0;
+    losses = 0;
+    updateSessionSummaryUI();
+    closeSessionModal();
+
+    resetGame();
+}
+
+
+
 restartBtn.addEventListener("click", function () {
     resetGame();
     if (bestScore > 0) {
@@ -197,3 +267,7 @@ window.addEventListener("load", function () {
     sessionStorage.setItem("currentScore", currentScore);
     currentScoreE1.textContent = currentScore;
 });
+
+endSessionBtn.addEventListener("click", openSessionModal);
+closeModalBtn.addEventListener("click", closeSessionModal);
+confirmEndSessionBtn.addEventListener("click", endSession);

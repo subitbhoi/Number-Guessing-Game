@@ -43,6 +43,35 @@
             </div>
             <p class="message"></p>
             <button id="restartBtn">Restart Game</button>
+            <div class="session-summary">
+                <h3>Session Summary</h3>
+                <ul>
+                    <li>Score: <span id="sessionScore">0</span></li>
+                    <li>Rounds: <span id="roundsPlayed">0</span></li>
+                    <li>Wins: <span id="wins">0</span></li>
+                    <li>Losses: <span id="losses">0</span></li>
+                </ul>
+            </div>
+            <button id="endSessionBtn" class="secondary-btn">End Session</button>
+        </div>
+        <div class="modal-overlay" id="sessionModal">
+            <div class="modal">
+                <h2>Session Summary</h2>
+
+                <ul class="modal-summary">
+                    <li>Score: <span id="modalScore">0</span></li>
+                    <li>Rounds Played: <span id="modalRounds">0</span></li>
+                    <li>Wins: <span id="modalWins">0</span></li>
+                    <li>Losses: <span id="modalLosses">0</span></li>
+                </ul>
+
+                <div class="modal-actions">
+                    <button id="closeModalBtn">Close</button>
+                    <button id="confirmEndSessionBtn" class="danger-btn">
+                        Clear Session
+                    </button>
+                </div>
+            </div>
         </div>
     </main>
     <script src="assets/js/script.js" defer></script>

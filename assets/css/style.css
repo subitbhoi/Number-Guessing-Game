@@ -135,6 +135,93 @@ button {
     font-weight: bold;
 }
 
+.session-summary {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.session-summary h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.session-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.session-summary li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-summary {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.modal-summary li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.modal-actions button {
+    flex: 1;
+}
+
+.danger-btn {
+    background: #e53935;
+    color: white;
+}
+
 @keyframes shake {
     0% {
         transform: translateX(0);
