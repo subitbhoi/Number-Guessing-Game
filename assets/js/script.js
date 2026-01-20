@@ -217,10 +217,22 @@ function openSessionModal() {
     modalWins.textContent = wins;
     modalLosses.textContent = losses;
 
+    modalScore.textContent = 0;
+    modalRounds.textContent = 0;
+    modalWins.textContent = 0;
+    modalLosses.textContent = 0;
+
+
     animateScore(modalScore, 0, sessionScore, 600);
-    animateScore(modalRounds, 0, roundsPlayed, 600);
-    animateScore(modalWins, 0, wins, 600);
-    animateScore(modalLosses, 0, losses, 600);
+    setTimeout(() => {
+        animateScore(modalRounds, 0, roundsPlayed, 600);
+    }, 150);
+    setTimeout(() => {
+        animateScore(modalWins, 0, wins, 600);
+    }, 300);
+    setTimeout(() => {
+        animateScore(modalLosses, 0, losses, 600);
+    }, 450);
 
     sessionModal.classList.add("active");
     document.body.classList.add("modal-open");
