@@ -45,6 +45,13 @@ body {
     letter-spacing: 1px;
 }
 
+.switchProfileBtn {
+    margin-top: 0.5rem;
+    font-size: 0.85;
+    opacity: 0;
+    border: none;
+}
+
 .level {
     display: flex;
     justify-content: space-between;
@@ -158,6 +165,17 @@ button {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.3rem;
+}
+
+#profileModal .modal {
+    text-align: center;
+}
+
+#profileNameInput {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 1rem 0;
+    font-size: 1rem;
 }
 
 .modal-overlay {

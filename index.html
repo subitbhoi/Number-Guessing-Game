@@ -16,6 +16,7 @@
         <div class="gameContainer">
             <div class="score-board">
                 <p>Score: <span id="currentScore">0</span></p>
+                <p id="switchProfileBtn" class="secondary-btn"><span id="activeProfileName">Guest</span></p>
                 <p>Best Score: <span id="bestScore">0</span></p>
             </div>
             <h1>Number Guessing Game</h1>
@@ -38,7 +39,7 @@
             </p>
             <p class="attempts">Attempts left:</p>
             <div class="inputGroup">
-                <label for="guessInput">Enter your guess:</label>
+                <label for="guessInput"></label>
                 <input type="number" id="guessInput" min="1" max="10" placeholder="Enter your guess" />
                 <button id="guessBtn">Guess The Number</button>
             </div>
@@ -54,6 +55,16 @@
                 </ul>
             </div>
             <button id="endSessionBtn" class="secondary-btn">End Session</button>
+        </div>
+        <div class="modal-overlay active" id="profileModal">
+            <div class="modal">
+                <h2>Profile</h2>
+                <input type="text" id="profileNameInput" placeholder="Enter Your Name" />
+                <div class="modal-action">
+                    <button id="guestBtn">Continue as Guest</button>
+                    <button id="profileStartBtn">Start</button>
+                </div>
+            </div>
         </div>
         <div class="modal-overlay" id="sessionModal">
             <div class="modal">
