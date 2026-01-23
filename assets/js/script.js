@@ -340,13 +340,33 @@ function saveProfileName(profileName) {
     }
 }
 
+function getBestScoreForProfile(profileName) {
+    return Number(localStorage.getItem(`bestScore_${profileName}`)) || 0;
+}
+
 function renderProfileList() {
-    const profiles = getSavedProfiles();
+    let profiles = getSavedProfiles();
+
+    // ❌ Remove guest if accidentally stored
+    profiles = profiles.filter(p => p !== "guest");
+
+    // 🏆 Sort by best score (DESC)
+    profiles.sort((a, b) => {
+        return getBestScoreForProfile(b) - getBestScoreForProfile(a);
+    });
+
     profileListE1.innerHTML = "";
 
     profiles.forEach(function (profileName) {
         const li = document.createElement("li");
         li.classList.add("profile-item");
+
+        const avatar = createAvatar(profileName);
+
+        // ⭐ highlight top profile
+        if (profileName === profiles[0]) {
+            avatar.classList.add("top-profile");
+        }
 
         const nameSpan = document.createElement("span");
         nameSpan.textContent = profileName;
@@ -356,41 +376,103 @@ function renderProfileList() {
             setProfile(profileName);
         });
 
+        const scoreSpan = document.createElement("span");
+        scoreSpan.classList.add("profile-score");
+        scoreSpan.textContent = getBestScoreForProfile(profileName);
+
         const deleteSpan = document.createElement("span");
         deleteSpan.textContent = "🗑️";
         deleteSpan.classList.add("delete-profile");
 
-        // safety rules
-        if (profileName === currentProfile || profileName === "guest") {
+        if (profileName === currentProfile) {
             deleteSpan.classList.add("disabled");
         } else {
             deleteSpan.addEventListener("click", function (event) {
-                event.stopPropagation(); // VERY IMPORTANT
-
-                const confirmed = confirm(
-                    `Delete profile "${profileName}"? This cannot be undone.`
-                );
-
-                if (confirmed) {
+                event.stopPropagation();
+                if (confirm(`Delete profile "${profileName}"?`)) {
                     deleteProfile(profileName);
                     renderProfileList();
                 }
             });
         }
 
+        li.appendChild(avatar);
         li.appendChild(nameSpan);
+        li.appendChild(scoreSpan);
         li.appendChild(deleteSpan);
         profileListE1.appendChild(li);
     });
 }
 
 function deleteProfile(profileName) {
-    // remove from profile list
     const profiles = getSavedProfiles().filter(p => p !== profileName);
     localStorage.setItem("profileList", JSON.stringify(profiles));
 
-    // remove best score
     localStorage.removeItem(`bestScore_${profileName}`);
+}
+
+function getAvatarColor(profileName) {
+    let hash = 0;
+
+    for (let i = 0; i < profileName.length; i++) {
+        hash = profileName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+}
+
+function getAvatarGradient(profileName) {
+    let hash = 0;
+
+    for (let i = 0; i < profileName.length; i++) {
+        hash = profileName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const hue1 = Math.abs(hash) % 360;
+    const hue2 = (hue1 + 40) % 360;
+
+    return `linear-gradient(135deg,
+        hsl(${hue1}, 70%, 55%),
+        hsl(${hue2}, 70%, 45%)
+    )`;
+}
+
+function createAvatar(profileName) {
+    const avatar = document.createElement("div");
+    avatar.classList.add("avatar");
+
+    avatar.innerHTML = `
+        <svg class="avatar-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+        </svg>
+    `;
+
+    if (profileName === "guest") {
+        avatar.style.background =
+            "linear-gradient(135deg, #9e9e9e, #616161)";
+    } else {
+        avatar.style.background = getAvatarGradient(profileName);
+    }
+
+    return avatar;
+}
+
+function updateActiveProfileUI(profileName) {
+    activeProfileNameE1.textContent = profileName;
+
+    activeAvatar.innerHTML = `
+        <svg class="avatar-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+        </svg>
+    `;
+
+    activeAvatar.style.background =
+        profileName === "guest"
+            ? "linear-gradient(135deg, #9e9e9e, #616161)"
+            : getAvatarGradient(profileName);
 }
 
 restartBtn.addEventListener("click", function () {
