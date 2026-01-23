@@ -346,16 +346,51 @@ function renderProfileList() {
 
     profiles.forEach(function (profileName) {
         const li = document.createElement("li");
-        li.textContent = profileName;
+        li.classList.add("profile-item");
 
-        li.addEventListener("click", function () {
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = profileName;
+        nameSpan.classList.add("profile-name");
+
+        nameSpan.addEventListener("click", function () {
             setProfile(profileName);
-            message.textContent = `Welcome back ${profileName}`;
-            resetGame();
         });
 
+        const deleteSpan = document.createElement("span");
+        deleteSpan.textContent = "🗑️";
+        deleteSpan.classList.add("delete-profile");
+
+        // safety rules
+        if (profileName === currentProfile || profileName === "guest") {
+            deleteSpan.classList.add("disabled");
+        } else {
+            deleteSpan.addEventListener("click", function (event) {
+                event.stopPropagation(); // VERY IMPORTANT
+
+                const confirmed = confirm(
+                    `Delete profile "${profileName}"? This cannot be undone.`
+                );
+
+                if (confirmed) {
+                    deleteProfile(profileName);
+                    renderProfileList();
+                }
+            });
+        }
+
+        li.appendChild(nameSpan);
+        li.appendChild(deleteSpan);
         profileListE1.appendChild(li);
     });
+}
+
+function deleteProfile(profileName) {
+    // remove from profile list
+    const profiles = getSavedProfiles().filter(p => p !== profileName);
+    localStorage.setItem("profileList", JSON.stringify(profiles));
+
+    // remove best score
+    localStorage.removeItem(`bestScore_${profileName}`);
 }
 
 restartBtn.addEventListener("click", function () {

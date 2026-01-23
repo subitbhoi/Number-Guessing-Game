@@ -206,6 +206,34 @@ button {
     background: rgba(0, 0, 0, 0.05);
 }
 
+.profile-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 6px;
+}
+
+.profile-name {
+    cursor: pointer;
+}
+
+.delete-profile {
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.delete-profile:hover {
+    opacity: 1;
+    color: #e53935;
+}
+
+.delete-profile.disabled {
+    opacity: 0;
+    cursor: not-allowed;
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0;
