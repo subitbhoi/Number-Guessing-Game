@@ -423,8 +423,6 @@ function recalibrate() {
     guessInput.disabled = true;
     guessBtn.disabled = true;
 
-
-
     endSession();
     resetGame();
 }
