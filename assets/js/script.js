@@ -27,6 +27,7 @@ const profileStartBtn = document.getElementById("profileStartBtn");
 const guestBtn = document.getElementById("guestBtn");
 const switchProfileBtn = document.getElementById("switchProfileBtn");
 const activeProfileNameE1 = document.getElementById("activeProfileName");
+const profileListE1 = document.getElementById("profileList");
 const difficultyLevelSettings = {
     easy: { max: 10 },
     medium: { max: 50 },
@@ -60,7 +61,7 @@ let bestScore = localStorage.getItem("bestScore") || 0;
 bestScoreE1.textContent = bestScore;
 let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
 currentScoreE1.textContent = currentScore;
-message.textContent = `Best Score: ${bestScore}`;
+// message.textContent = `Best Score: ${bestScore}`;
 let currentMax = "";
 let currentAttempts = "";
 let secretNumber = Math.floor(Math.random() * currentMax) + 1;
@@ -284,6 +285,7 @@ function setProfile(profileName) {
         bestScoreE1.textContent = 0;
         activeProfileNameE1.textContent = "Guest";
     } else {
+        saveProfileName(profileName);
         currentProfile = profileName;
         isGuest = false;
         loadBestScoreForProfile(profileName);
@@ -295,6 +297,7 @@ function setProfile(profileName) {
 
 function openProfileModal() {
     profileNameInput.value = "";
+    renderProfileList();
     profileModal.classList.add("active");
     document.body.classList.add("modal-open");
 }
@@ -307,23 +310,53 @@ function closeProfileModal() {
 function saveBestScore(score) {
     if (isGuest) return;
 
-    const key = `bestScore-$(currentProfile)`;
+    const key = `bestScore_${currentProfile}`;
     const storedBest = Number(localStorage.getItem(key)) || 0;
 
     if (score > storedBest) {
-        localStorage.getItem(key, score);
+        localStorage.setItem(key, score);
     }
 
 }
 
 function loadBestScoreForProfile(profile) {
-    const key = `bestScore_$(profile)`;
+    const key = `bestScore_${profile}`;
     const best = Number(localStorage.getItem(key)) || 0;
 
     bestScore = best;
     bestScoreE1.textContent = best;
 }
 
+function getSavedProfiles() {
+    return JSON.parse(localStorage.getItem("profileList")) || [];
+}
+
+function saveProfileName(profileName) {
+    const profiles = getSavedProfiles();
+
+    if (!profiles.includes(profileName)) {
+        profiles.push(profileName);
+        localStorage.setItem("profileList", JSON.stringify(profiles));
+    }
+}
+
+function renderProfileList() {
+    const profiles = getSavedProfiles();
+    profileListE1.innerHTML = "";
+
+    profiles.forEach(function (profileName) {
+        const li = document.createElement("li");
+        li.textContent = profileName;
+
+        li.addEventListener("click", function () {
+            setProfile(profileName);
+            message.textContent = `Welcome back ${profileName}`;
+            resetGame();
+        });
+
+        profileListE1.appendChild(li);
+    });
+}
 
 restartBtn.addEventListener("click", function () {
     resetGame();
@@ -359,6 +392,7 @@ sessionModal.addEventListener("click", function (event) {
     }
 });
 
+
 window.addEventListener("load", function () {
     if (bestScore > 0) {
         animateScore(bestScoreE1, 0, Number(bestScore));
@@ -369,9 +403,31 @@ window.addEventListener("load", function () {
     currentScore = 0;
     sessionStorage.setItem("currentScore", currentScore);
     currentScoreE1.textContent = currentScore;
+    renderProfileList();
     endSession();
     resetGame();
 });
+
+function recalibrate() {
+    currentScore = 0;
+    sessionStorage.setItem("currentScore", currentScore);
+    currentScoreE1.textContent = currentScore;
+    difficultyLevel.selectedIndex = 0;
+    attemptLevel.selectedIndex = 0;
+    difficultyLevel.disabled = false;
+    attemptLevel.disabled = true;
+    difficultyLevel.focus();
+    instructions.textContent = "Select Difficulty Level and Attempts to continue";
+    attempts.textContent = "Attempts left: Select Attempts";
+    guessInput.placeholder = "Enter your guess";
+    guessInput.disabled = true;
+    guessBtn.disabled = true;
+
+
+
+    endSession();
+    resetGame();
+}
 
 guestBtn.addEventListener("click", function () {
 
@@ -400,10 +456,10 @@ guestBtn.addEventListener("click", function () {
 });
 
 profileStartBtn.addEventListener("click", function () {
-    const name = profileNameInput.value.trim();
+    const profileName = profileNameInput.value.trim();
 
-    if (!name) {
-        profileNameInput.placeholder = "Enter your name";
+    if (!profileName) {
+        profileNameInput.placeholder = "Enter your Name";
         profileNameInput.classList.add("shake");
 
         setTimeout(function () {
@@ -412,7 +468,7 @@ profileStartBtn.addEventListener("click", function () {
         return;
     }
 
-    currentProfile = name;
+    currentProfile = profileName;
     isGuest = false;
 
     difficultyLevel.selectedIndex = 0;
@@ -420,7 +476,7 @@ profileStartBtn.addEventListener("click", function () {
 
     instructions.textContent = "Select Difficulty Level and Attempts to continue";
     attempts.textContent = "Attempts left: Select Attempts";
-    message.textContent = `Welcome`;
+    message.textContent = `Welcome ${profileName}`;
 
     guessInput.placeholder = "Enter your guess";
     guessInput.disabled = true;
@@ -430,9 +486,9 @@ profileStartBtn.addEventListener("click", function () {
     difficultyLevel.focus();
 
 
-    loadBestScoreForProfile(name);
+    loadBestScoreForProfile(profileName);
     closeProfileModal();
-    setProfile(name);
+    setProfile(profileName);
 });
 
 switchProfileBtn.addEventListener("click", function () {

@@ -178,6 +178,34 @@ button {
     font-size: 1rem;
 }
 
+.profile-list {
+    margin-top: 1rem;
+    text-align: left;
+}
+
+.profile-title {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 0,4rem;
+}
+
+#profileList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#profileList li {
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#profileList li:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0;
