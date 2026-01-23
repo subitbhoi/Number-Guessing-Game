@@ -574,7 +574,7 @@ profileStartBtn.addEventListener("click", function () {
     const profileName = profileNameInput.value.trim();
 
     if (!profileName) {
-        profileNameInput.placeholder = "Enter your Name";
+        profileNameInput.placeholder = "Enter Your Name";
         profileNameInput.classList.add("shake");
 
         setTimeout(function () {
