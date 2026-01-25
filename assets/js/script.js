@@ -61,7 +61,7 @@ let bestScore = localStorage.getItem("bestScore") || 0;
 bestScoreE1.textContent = bestScore;
 let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
 currentScoreE1.textContent = currentScore;
-// message.textContent = `Best Score: ${bestScore}`;
+message.textContent = `Best Score: ${bestScore}`;
 let currentMax = "";
 let currentAttempts = "";
 let secretNumber = Math.floor(Math.random() * currentMax) + 1;
@@ -123,7 +123,7 @@ guessBtn.addEventListener("click", function () {
         animateScore(currentScoreE1, 0, currentScore);
 
         bestScore = Number(bestScore) + Number(totalScore);
-        localStorage.setItem("bestScore", bestScore);
+        localStorage.setItem(`bestScore_${currentProfile}`, bestScore);
         animateScore(bestScoreE1, bestScore - totalScore, bestScore);
 
         roundsPlayed++;
@@ -268,7 +268,6 @@ function endSession() {
 }
 
 function setProfile(profileName) {
-    sessionStorage.clear();
 
     currentScore = 0;
     roundsPlayed = 0;
@@ -281,6 +280,7 @@ function setProfile(profileName) {
     if (profileName === "guest") {
         currentProfile = "guest";
         isGuest = true;
+        sessionStorage.clear();
         bestScore = 0;
         bestScoreE1.textContent = 0;
         activeProfileNameE1.textContent = "Guest";
@@ -288,8 +288,8 @@ function setProfile(profileName) {
         saveProfileName(profileName);
         currentProfile = profileName;
         isGuest = false;
-        loadBestScoreForProfile(profileName);
         activeProfileNameE1.textContent = profileName;
+        loadBestScoreForProfile(profileName);
     }
     closeProfileModal();
 
@@ -319,8 +319,8 @@ function saveBestScore(score) {
 
 }
 
-function loadBestScoreForProfile(profile) {
-    const key = `bestScore_${profile}`;
+function loadBestScoreForProfile(profileName) {
+    const key = `bestScore_${profileName}`;
     const best = Number(localStorage.getItem(key)) || 0;
 
     bestScore = best;
