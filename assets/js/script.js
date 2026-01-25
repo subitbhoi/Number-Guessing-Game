@@ -57,14 +57,14 @@ let sessionScore = Number(sessionStorage.getItem("sessionScore")) || 0;
 let roundsPlayed = Number(sessionStorage.getItem("roundsPlayed")) || 0;
 let wins = Number(sessionStorage.getItem("wins")) || 0;
 let losses = Number(sessionStorage.getItem("losses")) || 0;
-let bestScore = localStorage.getItem("bestScore") || 0;
+let bestScore = 0
 bestScoreE1.textContent = bestScore;
 let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
 currentScoreE1.textContent = currentScore;
 message.textContent = `Best Score: ${bestScore}`;
 let currentMax = "";
 let currentAttempts = "";
-let secretNumber = Math.floor(Math.random() * currentMax) + 1;
+let secretNumber = "";
 attemptLevel.disabled = true;
 guessInput.disabled = true;
 guessBtn.disabled = true;
@@ -122,8 +122,13 @@ guessBtn.addEventListener("click", function () {
 
         animateScore(currentScoreE1, 0, currentScore);
 
-        bestScore = Number(bestScore) + Number(totalScore);
-        localStorage.setItem(`bestScore_${currentProfile}`, bestScore);
+        if (currentProfile === "guest") {
+            bestScore = currentScore;
+        } else {
+            bestScore = Number(bestScore) + Number(totalScore);
+            localStorage.setItem(`bestScore_${currentProfile}`, bestScore);
+        };
+
         animateScore(bestScoreE1, bestScore - totalScore, bestScore);
 
         roundsPlayed++;
@@ -549,6 +554,7 @@ guestBtn.addEventListener("click", function () {
     currentProfile = "guest";
     isGuest = true;
 
+    bestScore = 0;
     bestScoreE1.textContent = 0;
     currentScoreE1.textContent = 0;
 
