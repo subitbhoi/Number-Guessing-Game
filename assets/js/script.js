@@ -129,7 +129,7 @@ guessBtn.addEventListener("click", function () {
         roundsPlayed++;
         wins++
         sessionScore = currentScore;
-        saveBestScore(currentScore);
+        // saveBestScore(currentScore);
 
         sessionStorage.setItem("roundsPlayed", roundsPlayed);
         sessionStorage.setItem("wins", wins);
@@ -305,19 +305,22 @@ function openProfileModal() {
 function closeProfileModal() {
     profileModal.classList.remove("active");
     document.body.classList.remove("modal-open");
-}
-
-function saveBestScore(score) {
-    if (isGuest) return;
-
-    const key = `bestScore_${currentProfile}`;
-    const storedBest = Number(localStorage.getItem(key)) || 0;
-
-    if (score > storedBest) {
-        localStorage.setItem(key, score);
+     if (bestScore > 0) {
+        animateScore(bestScoreE1, 0, Number(bestScore));
     }
-
 }
+
+// function saveBestScore(score) {
+//     if (isGuest) return;
+
+//     const key = `bestScore_${currentProfile}`;
+//     const storedBest = Number(localStorage.getItem(key)) || 0;
+
+//     if (score > storedBest) {
+//         localStorage.setItem(key, score);
+//     }
+
+// }
 
 function loadBestScoreForProfile(profileName) {
     const key = `bestScore_${profileName}`;
@@ -511,10 +514,7 @@ sessionModal.addEventListener("click", function (event) {
 
 
 window.addEventListener("load", function () {
-    if (bestScore > 0) {
-        animateScore(bestScoreE1, 0, Number(bestScore));
-    }
-
+    bestScoreE1.textContent = 0;
     difficultyLevel.selectedIndex = 0;
     attemptLevel.selectedIndex = 0;
     currentScore = 0;
