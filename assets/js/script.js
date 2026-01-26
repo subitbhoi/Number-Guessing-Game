@@ -134,7 +134,6 @@ guessBtn.addEventListener("click", function () {
         roundsPlayed++;
         wins++
         sessionScore = currentScore;
-        // saveBestScore(currentScore);
 
         sessionStorage.setItem("roundsPlayed", roundsPlayed);
         sessionStorage.setItem("wins", wins);
@@ -263,12 +262,17 @@ function endSession() {
     roundsPlayed = 0;
     wins = 0;
     losses = 0;
+
     updateSessionSummaryUI();
     closeSessionModal();
     resetGame();
+
     sessionStorage.clear();
+
     currentScore = 0;
     sessionStorage.setItem("currentScore", currentScore);
+    currentScoreE1.textContent = currentScore;
+    
     location.reload();
 }
 
@@ -280,7 +284,6 @@ function setProfile(profileName) {
     losses = 0;
 
     updateSessionSummaryUI();
-    animateScore(0);
 
     if (profileName === "guest") {
         currentProfile = "guest";
@@ -315,18 +318,6 @@ function closeProfileModal() {
     }
 }
 
-// function saveBestScore(score) {
-//     if (isGuest) return;
-
-//     const key = `bestScore_${currentProfile}`;
-//     const storedBest = Number(localStorage.getItem(key)) || 0;
-
-//     if (score > storedBest) {
-//         localStorage.setItem(key, score);
-//     }
-
-// }
-
 function loadBestScoreForProfile(profileName) {
     const key = `bestScore_${profileName}`;
     const best = Number(localStorage.getItem(key)) || 0;
@@ -355,10 +346,8 @@ function getBestScoreForProfile(profileName) {
 function renderProfileList() {
     let profiles = getSavedProfiles();
 
-    // ❌ Remove guest if accidentally stored
     profiles = profiles.filter(p => p !== "guest");
 
-    // 🏆 Sort by best score (DESC)
     profiles.sort((a, b) => {
         return getBestScoreForProfile(b) - getBestScoreForProfile(a);
     });
@@ -371,7 +360,7 @@ function renderProfileList() {
 
         const avatar = createAvatar(profileName);
 
-        // ⭐ highlight top profile
+
         if (profileName === profiles[0]) {
             avatar.classList.add("top-profile");
         }
@@ -529,25 +518,6 @@ window.addEventListener("load", function () {
     endSession();
     resetGame();
 });
-
-function recalibrate() {
-    currentScore = 0;
-    sessionStorage.setItem("currentScore", currentScore);
-    currentScoreE1.textContent = currentScore;
-    difficultyLevel.selectedIndex = 0;
-    attemptLevel.selectedIndex = 0;
-    difficultyLevel.disabled = false;
-    attemptLevel.disabled = true;
-    difficultyLevel.focus();
-    instructions.textContent = "Select Difficulty Level and Attempts to continue";
-    attempts.textContent = "Attempts left: Select Attempts";
-    guessInput.placeholder = "Enter your guess";
-    guessInput.disabled = true;
-    guessBtn.disabled = true;
-
-    endSession();
-    resetGame();
-}
 
 guestBtn.addEventListener("click", function () {
 
