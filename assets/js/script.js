@@ -61,7 +61,6 @@ let bestScore = 0
 bestScoreE1.textContent = bestScore;
 let currentScore = Number(sessionStorage.getItem("currentScore")) || 0;
 currentScoreE1.textContent = currentScore;
-// message.textContent = `Best Score: ${bestScore}`;
 let currentMax = "";
 let currentAttempts = "";
 let secretNumber = "";
@@ -277,7 +276,6 @@ function endSession() {
 }
 
 function setProfile(profileName) {
-    // guard: same profile selected
     if (profileName === currentProfile) {
         closeProfileModal();
         return;
@@ -306,6 +304,8 @@ function setProfile(profileName) {
     losses = 0;
     sessionScore = 0;
 
+    currentScoreE1.textContent = currentScore;
+
     difficultyLevel.selectedIndex = 0;
     attemptLevel.selectedIndex = 0;
 
@@ -323,9 +323,7 @@ function setProfile(profileName) {
 
     updateSessionSummaryUI();
 
-    if (!isGuest && isNewProfile) {
-        saveProfileName(profileName);
-    }
+   
 
     if (isGuest) {
         bestScore = 0;
@@ -338,17 +336,24 @@ function setProfile(profileName) {
     }
 
     activeProfileNameE1.textContent = isGuest ? "Guest" : profileName;
+    
+     if (!isGuest && isNewProfile) {
+        saveProfileName(profileName);
+    }
 
+    renderProfileList();
     closeProfileModal();
 }
 
 
 function openProfileModal() {
-    profileNameInput.value = "";
-    renderProfileList();
     profileModal.classList.add("active");
     document.body.classList.add("modal-open");
+
+    profileNameInput.value = "";
     profileNameInput.focus();
+
+    renderProfileList();   
 }
 
 function closeProfileModal() {
@@ -559,6 +564,7 @@ window.addEventListener("load", function () {
     currentScore = 0;
     sessionStorage.setItem("currentScore", currentScore);
     currentScoreE1.textContent = currentScore;
+    profileNameInput.focus();
     renderProfileList();
     endSession();
     resetGame();
@@ -608,28 +614,7 @@ profileStartBtn.addEventListener("click", function () {
         }, 400);
         return;
     }
-
-    currentProfile = profileName;
-    isGuest = false;
-
-    difficultyLevel.selectedIndex = 0;
-    attemptLevel.selectedIndex = 0;
-
-    instructions.textContent = "Select Difficulty Level and Attempts to continue";
-    attempts.textContent = "Attempts left: Select Attempts";
-
-
-    guessInput.placeholder = "Enter your guess";
-    guessInput.disabled = true;
-    guessBtn.disabled = true;
-    difficultyLevel.disabled = false;
-    attemptLevel.disabled = true;
-    difficultyLevel.focus();
-
-
-    loadBestScoreForProfile(profileName);
-    closeProfileModal();
-    setProfile(profileName);
+    setProfile(profileName);  
 });
 
 document.addEventListener("keydown", function (event) {
