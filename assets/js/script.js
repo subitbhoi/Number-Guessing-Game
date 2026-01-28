@@ -185,13 +185,22 @@ guessBtn.addEventListener("click", function () {
 });
 
 function resetGame() {
-    selectedAttempt = attemptLevel.value;
-    const attemptSettings = attemptLevelSettings[selectedAttempt];
+    if (!currentMax || !attemptLevelSettings[attemptLevel.value]) {
+        attempts.textContent = "Attempts left: Select Attempts";
+        guessInput.disabled = true;
+        guessBtn.disabled = true;
+        return;
+    }
+
+    const attemptSettings = attemptLevelSettings[attemptLevel.value];
     currentAttempts = attemptSettings.attempts;
+
     attempts.textContent = `Attempt left: ${currentAttempts}`;
     secretNumber = Math.floor(Math.random() * currentMax) + 1;
+
     message.textContent = `Score: ${currentScore} & Best Score: ${bestScore}`;
     currentScoreE1.textContent = currentScore;
+
     guessInput.value = "";
     guessInput.disabled = false;
     guessBtn.disabled = false;
@@ -199,26 +208,36 @@ function resetGame() {
 }
 
 function animateScore(element, start, end, duration = 1000) {
+    if (element.dataset.timerId) {
+        clearInterval(Number(element.dataset.timerId));
+        delete element.dataset.timerId;
+    }
+
     if (start === end) {
         element.textContent = end;
         return;
     }
+
     let current = start;
     const increment = end > start ? 1 : -1;
-    const stepTime = Math.abs(Math.floor(duration / (end - start)));
+    const stepTime = Math.max(16, Math.abs(duration / (end - start)));
 
-    const timer = setInterval(function () {
+    const timer = setInterval(() => {
         current += increment;
         element.textContent = current;
 
         if (current === end) {
             clearInterval(timer);
+            delete element.dataset.timerId;
         }
     }, stepTime);
+
+    element.dataset.timerId = timer;
 }
 
 function updateSessionSummaryUI() {
     sessionScoreE1.textContent = sessionScore;
+    currentScoreE1.textContent = currentScore;
     roundsPlayedE1.textContent = roundsPlayed;
     winsE1.textContent = wins;
     lossesE1.textContent = losses;
@@ -256,23 +275,39 @@ function closeSessionModal() {
     document.body.classList.remove("modal-open");
 }
 
-function endSession() {
+function resetGameStateInternal() {
+    difficultyLevel.selectedIndex = 0;
+    attemptLevel.selectedIndex = 0;
+    attemptLevel.disabled = true;
+    guessInput.disabled = true;
+    guessBtn.disabled = true;
+
+    instructions.textContent = "Select Difficulty Level and Attempts to continue";
+    attempts.textContent = "Attempts left: Select Attempts";
+
+    difficultyLevel.disabled = false;
+    
+    difficultyLevel.focus();
+
+    guessInput.value = "";
+    guessInput.placeholder = "Enter your guess";
+
+    currentScore = 0;
     sessionScore = 0;
     roundsPlayed = 0;
     wins = 0;
     losses = 0;
 
-    updateSessionSummaryUI();
-    closeSessionModal();
-    resetGame();
+    currentScoreE1.textContent = 0;
 
     sessionStorage.clear();
+    updateSessionSummaryUI();
+}
 
-    currentScore = 0;
-    sessionStorage.setItem("currentScore", currentScore);
-    currentScoreE1.textContent = currentScore;
-    
-    location.reload();
+function endSession() {
+    resetGame();
+    resetGameStateInternal();
+    closeSessionModal();
 }
 
 function setProfile(profileName) {
@@ -304,7 +339,7 @@ function setProfile(profileName) {
     losses = 0;
     sessionScore = 0;
 
-    currentScoreE1.textContent = currentScore;
+    currentScoreE1.textContent = 0;
 
     difficultyLevel.selectedIndex = 0;
     attemptLevel.selectedIndex = 0;
@@ -322,8 +357,6 @@ function setProfile(profileName) {
     difficultyLevel.focus();
 
     updateSessionSummaryUI();
-
-   
 
     if (isGuest) {
         bestScore = 0;
@@ -351,7 +384,10 @@ function openProfileModal() {
     document.body.classList.add("modal-open");
 
     profileNameInput.value = "";
-    profileNameInput.focus();
+
+    setTimeout(() => {
+        profileNameInput.focus();
+    }, 0);
 
     renderProfileList();   
 }
@@ -506,22 +542,6 @@ function createAvatar(profileName) {
     return avatar;
 }
 
-function updateActiveProfileUI(profileName) {
-    activeProfileNameE1.textContent = profileName;
-
-    activeAvatar.innerHTML = `
-        <svg class="avatar-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
-        </svg>
-    `;
-
-    activeAvatar.style.background =
-        profileName === "guest"
-            ? "linear-gradient(135deg, #9e9e9e, #616161)"
-            : getAvatarGradient(profileName);
-}
-
 restartBtn.addEventListener("click", function () {
     resetGame();
     if (bestScore > 0) {
@@ -556,48 +576,26 @@ sessionModal.addEventListener("click", function (event) {
     }
 });
 
-
 window.addEventListener("load", function () {
-    bestScoreE1.textContent = 0;
-    difficultyLevel.selectedIndex = 0;
-    attemptLevel.selectedIndex = 0;
-    currentScore = 0;
-    sessionStorage.setItem("currentScore", currentScore);
-    currentScoreE1.textContent = currentScore;
-    profileNameInput.focus();
     renderProfileList();
-    endSession();
-    resetGame();
+    resetGameStateInternal();
+    updateSessionSummaryUI();
+
+    profileNameInput.focus();
 });
 
 guestBtn.addEventListener("click", function () {
 
     currentProfile = "guest";
     isGuest = true;
+    resetGameStateInternal();
 
     bestScore = 0;
     bestScoreE1.textContent = 0;
-    currentScore = 0;
-    currentScoreE1.textContent = 0;
 
     activeProfileNameE1.textContent = "Guest";
-
-    difficultyLevel.selectedIndex = 0;
-    attemptLevel.selectedIndex = 0;
-
-    instructions.textContent = "Select Difficulty Level and Attempts to continue";
-    attempts.textContent = "Attempts left: Select Attempts";
     message.textContent = `Welcome`;
-
-    guessInput.value = "";
-
-    guessInput.placeholder = "Enter your guess";
-    guessInput.disabled = true;
-    guessBtn.disabled = true;
-    difficultyLevel.disabled = false;
-    attemptLevel.disabled = true;
-    difficultyLevel.focus();
-
+    
     closeProfileModal();
     setProfile("guest");
 });
