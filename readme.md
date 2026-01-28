@@ -30,8 +30,8 @@ A feature-rich, interactive Number Guessing Game built with HTML, CSS, and JavaS
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/subitbhoi/Number-Guessing-Game.git
-    cd "Number Guessing Game"
+    https://github.com/subitbhoi/Number-Guessing-Game.git
+    
     ```
 2.  Open `index.html` in your web browser.
 3.  **Select a Difficulty**: Choose the range of numbers (Easy, Medium, Hard).
