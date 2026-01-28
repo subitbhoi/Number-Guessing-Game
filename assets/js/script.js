@@ -71,8 +71,7 @@ guessBtn.disabled = true;
 difficultyLevel.addEventListener("change", function () {
     const selectedDifficulty = difficultyLevel.value;
     const difficultySettings = difficultyLevelSettings[selectedDifficulty];
-    currentMax = difficultySettings.max;
-    secretNumber = Math.floor(Math.random() * currentMax) + 1;
+    currentMax = difficultySettings.max;    
     message.textContent = `Guess the number between 1 & ${currentMax}`;
     instructions.textContent = `Guess the number between 1 & ${currentMax}`;
     guessInput.placeholder = `1 - ${currentMax}`;
@@ -80,8 +79,7 @@ difficultyLevel.addEventListener("change", function () {
     guessInput.disabled = true;
     guessBtn.disabled = true;
     attemptLevel.disabled = false;
-    attemptLevel.focus();
-    resetGame();
+    attemptLevel.focus(); 
 });
 
 attemptLevel.addEventListener("change", function () {
@@ -244,11 +242,6 @@ function updateSessionSummaryUI() {
 }
 
 function openSessionModal() {
-    modalScore.textContent = sessionScore;
-    modalRounds.textContent = roundsPlayed;
-    modalWins.textContent = wins;
-    modalLosses.textContent = losses;
-
     modalScore.textContent = 0;
     modalRounds.textContent = 0;
     modalWins.textContent = 0;
@@ -558,20 +551,24 @@ guessInput.addEventListener("keydown", function (event) {
     }
 });
 
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        resetGame();
-    }
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+
+  if (profileModal.classList.contains("active")) {
+    closeProfileModal();
+    return;
+  } else if (sessionModal.classList.contains("active")) {
+    closeSessionModal();
+    return;
+  } else {
+    resetGame();
+  }
 });
 
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && sessionModal.classList.contains("active")) {
-        closeSessionModal();
-    }
-});
-
-sessionModal.addEventListener("click", function (event) {
-    if (event.target === sessionModal) {
+document.addEventListener("click", function (event) {
+    if (profileModal.classList.contains("active") && event.target === profileModal) {
+        closeProfileModal();
+    } else if (sessionModal.classList.contains("active") && event.target === sessionModal) {
         closeSessionModal();
     }
 });
